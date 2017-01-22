@@ -9,7 +9,7 @@ output: ioslides_presentation
 knitr::opts_chunk$set(echo = FALSE)
 ```
 
-## Good Food in Seattle, WA
+## Good Food in Seattle, WA (01/22/2017)
 ```{r}
 suppressWarnings(library(leaflet))
 
