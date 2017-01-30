@@ -1,0 +1,25 @@
+---
+title: "Baseball Plot"
+author: "Matthew Richards"
+date: "January 29, 2017"
+output: ioslides_presentation
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = FALSE)
+```
+
+library(plotly)
+library(plyr)
+library(RColorBrewer)
+
+## Babe Ruth vs. Barry Bonds
+
+```{r cache = TRUE, warning=FALSE}
+df <- read.csv("./baseballdatabank-master_2016-03-02/baseballdatabank-master/core/Batting.csv")
+ruth_aaron <- subset(df, playerID == "ruthba01" | playerID == "bondsba01")
+ruth_aaron <- mutate(ruth_aaron, name = ifelse(playerID == "ruthba01","Babe Ruth", "Barry Bonds"))
+plot_ly(ruth_aaron, x=~BB, y=~HR, 
+        type ="scatter", mode = "markers", color = ~name,colors=c("red","blue"))
+```
+
