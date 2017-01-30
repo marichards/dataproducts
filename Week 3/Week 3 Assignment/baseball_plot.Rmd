@@ -9,13 +9,12 @@ output: ioslides_presentation
 knitr::opts_chunk$set(echo = FALSE)
 ```
 
-library(plotly)
-library(plyr)
-library(RColorBrewer)
-
 ## Babe Ruth vs. Barry Bonds
 
 ```{r cache = TRUE, warning=FALSE}
+suppressMessages(library(plotly))
+suppressMessages(library(plyr))
+suppressMessages(library(RColorBrewer))
 df <- read.csv("./baseballdatabank-master_2016-03-02/baseballdatabank-master/core/Batting.csv")
 ruth_aaron <- subset(df, playerID == "ruthba01" | playerID == "bondsba01")
 ruth_aaron <- mutate(ruth_aaron, name = ifelse(playerID == "ruthba01","Babe Ruth", "Barry Bonds"))
