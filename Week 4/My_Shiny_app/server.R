@@ -30,37 +30,38 @@ shinyServer(function(input, output) {
     "<a href='http://www.dukeschowderhouse.com/locations/green-lake/'>Duke's Chowder House</a>"
   ))
   
-  # Create the color and labels data frame
-  legend.info <- data.frame(labels =  c("Seafood",
-                                        "Sandwiches",
-                                        "Brunch",
-                                        "Upscale"),
-                            colors = c("blue",
-                                       "red",
-                                       "green",
-                                       "purple"))
+
   
   location.selector <- reactive({
+    #input$update # Update if the button is clicked
+    # Create the color and labels data frame
+    legend.info <- data.frame(labels =  c("Seafood",
+                                          "Sandwiches",
+                                          "Brunch",
+                                          "Upscale"),
+                              colors = c("blue",
+                                         "red",
+                                         "green",
+                                         "purple"))
+    
     button.logic <- c(input$seafood,
                       input$sandwiches,
                       input$brunch,
                       input$upscale)
+    final.legend <- legend.info[button.logic,]
+    final.locations <- subset(seattle_loc, col %in% final.legend$colors)
+    return(list(final.legend,final.locations))
   })
   
-  # Use button logic to select the legend and data
-  location.selector()
-  final.legend <- legend.info
-  final.locations <- subset(seattle_loc, col %in% final.legend$colors)
-  
-  
   # Narrow down the data frames based on input
-  output$map1 <- renderLeaflet({final.locations %>%
+  output$map1 <- renderLeaflet({location.selector()[[2]] %>%
                      leaflet() %>%
                      addTiles() %>%
-                     addCircleMarkers(popup = final.locations$sites,
-                                      color=final.locations$col) %>%
-                     addLegend(labels = final.legend$labels,
-                               colors = final.legend$colors)
+                     addCircleMarkers(popup = location.selector()[[2]]$sites,
+                                      color=location.selector()[[2]]$col) %>%
+                     addLegend(labels = location.selector()[[1]]$labels,
+                               colors = location.selector()[[1]]$colors) %>%
+                     mapOptions(zoomToLimits = "first")
   })
   
 })
