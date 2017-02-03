@@ -1,0 +1,24 @@
+- Class: meta
+  Course: My First Lesson
+  Lesson: Lesson 2
+  Author: Matt Richards
+  Type: Standard
+  Organization: My Room
+  Version: 2.4.2
+
+- Class: mult_question
+  Output: Which of these shapes has 4 sides?
+  AnswerChoices: Square;Circle;Triangle
+  CorrectAnswer: Square
+  AnswerTests: omnitest(correctVal= 'Square')
+  Hint: It's like a rectangle, but not
+
+- Class: figure
+  Output: This is a simple graph
+  Figure: fig1.R
+  FigureType: new
+
+- Class: figure
+  Output: Let's draw a line
+  Figure: fig2.R
+  FigureType: add

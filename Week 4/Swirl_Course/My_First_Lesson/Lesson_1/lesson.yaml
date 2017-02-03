@@ -1,0 +1,16 @@
+- Class: meta
+  Course: My First Lesson
+  Lesson: Lesson 1
+  Author: your name goes here
+  Type: Standard
+  Organization: your organization's name goes here
+  Version: 2.4.2
+
+- Class: text
+  Output: This is just a message from me to you
+
+- Class: cmd_question
+  Output: Please type "2+2"
+  CorrectAnswer: 2+2
+  AnswerTests: omnitest(correctExpr="2 + 2")
+  Hint: Just type it dammit!
