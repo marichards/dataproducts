@@ -73,6 +73,8 @@ My server function does the following:
 
 ## The Server Calculation
 
+We'll calculate the distance from the default location( lng = -122.3 and lat = 47.6) to Pike Place Market
+
 ```{r echo=TRUE}
     new.lg <- input$new.lg
     new.lt <- input$new.lt
