@@ -5,6 +5,34 @@ date: "February 5, 2017"
 output: ioslides_presentation
 ---
 
+```{r echo = FALSE}
+# Make the data frame for later
+  seattle_loc <- data.frame(
+    lat = c(47.60972,47.5994409,47.6816841,47.6611935,
+            47.67538,47.6577795,47.6225807,47.6861061,
+            47.6503061,47.651112,47.6719757,47.639056,
+            47.598996,47.6107739,47.6495925,47.601597,
+            47.652196,47.6195659,47.6329571,47.6178717),
+    lng = c(-122.344387,-122.3312286,-122.3786947,-122.3422866,
+            -122.327614,-122.3197193,-122.2994758,-122.3403572,
+            -122.3523452,-122.3454357,-122.390061,-122.3588257,
+            -122.3348717,-122.3503437,-122.3445494,-122.3344979,
+            -122.3549098,-122.3150591,-122.3196533,-122.3285566),
+    stringsAsFactors = FALSE,
+    names <- c("Pike Place Market", "Salumi", "Un Bien", "Tilth", "The Butcher & The Baker",
+             "Portage Bay Cafe", "The Harvest Vine", "Duke's Chowder House", "Jai Thai",
+             "Sea Wolf Bakers", "Cafe Besalu", "Thai Kitchen", "Rain Shadow Meats", 
+             "Anthony's Pier 66", "The Whale Wins", "Tat's Deli", "Roxy's Diner", 
+             "Bakery Novuveau", "Wedgewood II Vegetarian Thai", "Crumble and Flake")
+  )
+
+input <- list(new.lg = -122.3,
+              new.lt = 47.6,
+              place.id = "Pike Place Market"
+              )
+
+```
+
 ```{r setup, include=FALSE}
 knitr::opts_chunk$set(echo = FALSE)
 ```
@@ -13,32 +41,20 @@ knitr::opts_chunk$set(echo = FALSE)
 
 Seattle, WA has a vibrant food scene, with many different types of cuisine around the city. As a food-loving individual, I am often asked about my recommendations around the city, but I can't always think of all the places I enjoy. It would be very useful to have a dynamic tool to help recommend my favorite places to others.
 
-This Shiny app serves as a useful aid; it contains 20 of my favorite eateries from around Seattle, categorized by food type and mapped out using the Leaflet package in R.
+This Shiny app serves as a useful aid; it contains 20 of my favorite eateries from around Seattle, categorized by food type and mapped out using the Leaflet package in R. Furthermore, it allows the user to input their current location (in longitude and latitude) and calculate the Euclidean distance between them and their selected restaurant.
 
-## What it Offers
+## What it Offers (User Interface)
 
 My app is essentially an organized, interactive map of 20 Seattle restaurants. The user is presented with: 
 
 * Check boxes that allow them to filter what type of restaurants they are interested in
-* An "Update Map" button that is used to apply restaurant filtering
 * A map of restaurants colored by type and coded by a legend
-* Clickable markers that display the restaurant's name as popup text and also serve as hyperlinks to the restaurant's home webpage. 
+* Clickable markers that display the restaurant's name as popup text and also serve as hyperlinks to the restaurant's home webpage.
+* A distance calculator that allows them to estimate how close each restaurant is from a specified location.
 
 For a more in-depth look at the back end, let's take a quick look at what the user interface and server do in my app. 
 
-## The User Interface
-
-My user interface is fairly simple and does the following operations:
-
-1. In the side panel, it presents the user with a set of checkboxes to filter different restaurant types
-
-2. Below the checkboxes, it contains a submitButton element to update the output based on the user's checkbox input. 
-
-3. In the main panel, it contains a leaflet map output that depends on the user input. 
-
-4. Below the map, it presents a short set of instructions for usage. 
-
-## The Server
+## The Server 
 
 My server function does the following:
 
@@ -49,8 +65,27 @@ My server function does the following:
 
 2. Creates a legend linking each color to a restaurant type
 
-3. Defines a reactive expression to filter locations based on user input. This is  my server's main calculation. 
+3. Reactively filters locations based on user input.
 
-4. Renders a Leaflet map using the filtered data frame and filtered legend
+4. Reactively observes the "Calculate Distance" actionButton and calculates Euclidean distance between the selected restaurant and coordinates.
+
+5. Renders a Leaflet map using the filtered data.
+
+## The Server Calculation
+
+```{r echo=TRUE}
+    new.lg <- input$new.lg
+    new.lt <- input$new.lt
+    # Grab the coordinates of the specified restaurant
+    idx <- which(seattle_loc$names == input$place.id)
+    rest.lg <- seattle_loc$lng[idx]
+    rest.lt <- seattle_loc$lat[idx]
+    # Calculate distance in longitude/latitude and convert to miles
+    lg.diff <- abs(new.lg - rest.lg) * 69.172
+    lt.diff <- abs(new.lt - rest.lt) * 46.622
+    # Format it
+    distance <- signif((sqrt(lg.diff^2 + lt.diff^2)),3)
+    paste(distance,"miles")
+```
 
 

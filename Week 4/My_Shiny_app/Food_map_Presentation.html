@@ -101,31 +101,20 @@
 
 <p>Seattle, WA has a vibrant food scene, with many different types of cuisine around the city. As a food-loving individual, I am often asked about my recommendations around the city, but I can&#39;t always think of all the places I enjoy. It would be very useful to have a dynamic tool to help recommend my favorite places to others.</p>
 
-<p>This Shiny app serves as a useful aid; it contains 20 of my favorite eateries from around Seattle, categorized by food type and mapped out using the Leaflet package in R.</p>
+<p>This Shiny app serves as a useful aid; it contains 20 of my favorite eateries from around Seattle, categorized by food type and mapped out using the Leaflet package in R. Furthermore, it allows the user to input their current location (in longitude and latitude) and calculate the Euclidean distance between them and their selected restaurant.</p>
 
-</article></slide><slide class=''><hgroup><h2>What it Offers</h2></hgroup><article  id="what-it-offers">
+</article></slide><slide class=''><hgroup><h2>What it Offers (User Interface)</h2></hgroup><article  id="what-it-offers-user-interface">
 
 <p>My app is essentially an organized, interactive map of 20 Seattle restaurants. The user is presented with:</p>
 
 <ul>
 <li>Check boxes that allow them to filter what type of restaurants they are interested in</li>
-<li>An &quot;Update Map&quot; button that is used to apply restaurant filtering</li>
 <li>A map of restaurants colored by type and coded by a legend</li>
 <li>Clickable markers that display the restaurant&#39;s name as popup text and also serve as hyperlinks to the restaurant&#39;s home webpage.</li>
+<li>A distance calculator that allows them to estimate how close each restaurant is from a specified location.</li>
 </ul>
 
 <p>For a more in-depth look at the back end, let&#39;s take a quick look at what the user interface and server do in my app.</p>
-
-</article></slide><slide class=''><hgroup><h2>The User Interface</h2></hgroup><article  id="the-user-interface">
-
-<p>My user interface is fairly simple and does the following operations:</p>
-
-<ol>
-<li><p>In the side panel, it presents the user with a set of checkboxes to filter different restaurant types</p></li>
-<li><p>Below the checkboxes, it contains a submitButton element to update the output based on the user&#39;s checkbox input.</p></li>
-<li><p>In the main panel, it contains a leaflet map output that depends on the user input.</p></li>
-<li><p>Below the map, it presents a short set of instructions for usage.</p></li>
-</ol>
 
 </article></slide><slide class=''><hgroup><h2>The Server</h2></hgroup><article  id="the-server">
 
@@ -140,9 +129,27 @@
 <li>Hyperlink to the website</li>
 </ul></li>
 <li><p>Creates a legend linking each color to a restaurant type</p></li>
-<li><p>Defines a reactive expression to filter locations based on user input. This is my server&#39;s main calculation.</p></li>
-<li><p>Renders a Leaflet map using the filtered data frame and filtered legend</p></li>
-</ol></article></slide>
+<li><p>Reactively filters locations based on user input.</p></li>
+<li><p>Reactively observes the &quot;Calculate Distance&quot; actionButton and calculates Euclidean distance between the selected restaurant and coordinates.</p></li>
+<li><p>Renders a Leaflet map using the filtered data.</p></li>
+</ol>
+
+</article></slide><slide class=''><hgroup><h2>The Server Calculation</h2></hgroup><article  id="the-server-calculation">
+
+<pre class = 'prettyprint lang-r'>    new.lg &lt;- input$new.lg
+    new.lt &lt;- input$new.lt
+    # Grab the coordinates of the specified restaurant
+    idx &lt;- which(seattle_loc$names == input$place.id)
+    rest.lg &lt;- seattle_loc$lng[idx]
+    rest.lt &lt;- seattle_loc$lat[idx]
+    # Calculate distance in longitude/latitude and convert to miles
+    lg.diff &lt;- abs(new.lg - rest.lg) * 69.172
+    lt.diff &lt;- abs(new.lt - rest.lt) * 46.622
+    # Format it
+    distance &lt;- signif((sqrt(lg.diff^2 + lt.diff^2)),3)
+    paste(distance,&quot;miles&quot;)</pre>
+
+<pre >## [1] &quot;3.1 miles&quot;</pre></article></slide>
 
 
   <slide class="backdrop"></slide>

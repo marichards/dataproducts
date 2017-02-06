@@ -42,8 +42,13 @@ shinyServer(function(input, output) {
     "<a href='http://www.bakerynouveau.com/'>Bakery Nouveau</a>",
     "<a href='http://wedgwoodtwovegetarianthai.com/'>Wedgewood II Vegetarian Thai</a>",
     "<a href='https://www.crumbleandflake.com/'>Crumble and Flake</a>"
-    
-  ))
+    ),
+    names <- c("Pike Place Market", "Salumi", "Un Bien", "Tilth", "The Butcher & The Baker",
+             "Portage Bay Cafe", "The Harvest Vine", "Duke's Chowder House", "Jai Thai",
+             "Sea Wolf Bakers", "Cafe Besalu", "Thai Kitchen", "Rain Shadow Meats", 
+             "Anthony's Pier 66", "The Whale Wins", "Tat's Deli", "Roxy's Diner", 
+             "Bakery Novuveau", "Wedgewood II Vegetarian Thai", "Crumble and Flake")
+  )
   # Create the color and labels data frame
   legend.info <- data.frame(labels =  c("Seafood",
                                         "Sandwiches",
@@ -60,7 +65,6 @@ shinyServer(function(input, output) {
 
   # Make a reactive expression that filters locations
   location.selector <- reactive({
-    #input$update.map # Update if the button is clicked
     button.logic <- c(input$seafood,
                       input$sandwiches,
                       input$brunch,
@@ -72,6 +76,29 @@ shinyServer(function(input, output) {
     return(list(final.legend,final.locations))
   })
   
+  # Make an observeEvent that calculates distance
+  distance.calculator <- eventReactive(input$action2,{
+    # Take in the longitude and latitude
+    new.lg <- input$new.lg
+    new.lt <- input$new.lt
+    
+    # Grab the coordinates of the specified restaurant
+    idx <- which(seattle_loc$names == input$place.id)
+    rest.lg <- seattle_loc$lng[idx]
+    rest.lt <- seattle_loc$lat[idx]
+    
+    # Calculate distance in longitude/latitude and convert to miles
+    # Length of 1 degree latitude: cos(47.6 degrees)*69.172 = 46.622
+    # Length of 1 degree longitude: 69.172 miles (negligible difference)
+    lg.diff <- abs(new.lg - rest.lg) * 69.172
+    lt.diff <- abs(new.lt - rest.lt) * 46.622
+    distance <- signif((sqrt(lg.diff^2 + lt.diff^2)),3)
+    return(paste(distance,"miles"))
+  })
+  
+  # Output the distance specified
+  output$text1 <- renderText(distance.calculator())
+
   # Narrow down the data frames based on input
   output$map1 <- renderLeaflet({location.selector()[[2]] %>%
                      leaflet() %>%
