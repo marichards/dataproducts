@@ -52,9 +52,9 @@ My app is essentially an organized, interactive map of 20 Seattle restaurants. T
 * Clickable markers that display the restaurant's name as popup text and also serve as hyperlinks to the restaurant's home webpage.
 * A distance calculator that allows them to estimate how close each restaurant is from a specified location.
 
-For a more in-depth look at the back end, let's take a quick look at what the user interface and server do in my app. 
+For a more in-depth look at the back end, let's take a quick look at what the server does in my app. 
 
-## The Server 
+## Server Summary
 
 My server function does the following:
 
