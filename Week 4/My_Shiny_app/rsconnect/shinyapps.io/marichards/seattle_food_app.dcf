@@ -3,9 +3,9 @@ title: Seattle_Food_App
 account: marichards
 server: shinyapps.io
 appId: 155098
-bundleId: 701684
+bundleId: 789819
 url: https://marichards.shinyapps.io/seattle_food_app/
-when: 1486343385.46682
+when: 1492201194.3014
 asMultiple: FALSE
 asStatic: FALSE
 ignoredFiles: Food_map_Presentation.html|Food_map_Presentation.Rmd
