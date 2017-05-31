@@ -1,0 +1,11 @@
+name: abby_and_phil_food_map
+title: Abby_and_Phil_Food_Map
+account: marichards
+server: shinyapps.io
+appId: 184224
+bundleId: 843015
+url: https://marichards.shinyapps.io/abby_and_phil_food_map/
+when: 1495908753.47658
+asMultiple: FALSE
+asStatic: FALSE
+ignoredFiles: Food_map_Presentation.html|Food_map_Presentation.Rmd

@@ -7,13 +7,14 @@ shinyServer(function(input, output) {
   seattle_loc <- readRDS("./seattle_loc.RDS")
     
   # Create the color and labels data frame
-  legend.info <- data.frame(labels =  c("Seafood",
+  legend.info <- data.frame(labels =  c("Go-To",
                                         "Sandwiches",
                                         "Brunch",
                                         "Upscale",
                                         "Thai",
                                         "Bakeries",
-                                        "Happy Hour",
+                                        "Breweries",
+                                        "Coffee",
                                         "Desserts"),
                             colors = c("blue",
                                        "red",
@@ -22,17 +23,19 @@ shinyServer(function(input, output) {
                                        "orange",
                                        "black",
                                        "yellow",
-                                       "brown"))  
+                                       "brown",
+                                       "gray"))  
 
   # Make a reactive expression that filters locations
   location.selector <- reactive({
-    button.logic <- c(input$seafood,
+    button.logic <- c(input$go.to,
                       input$sandwiches,
                       input$brunch,
                       input$upscale,
                       input$thai,
                       input$bakery,
-                      input$happyhour,
+                      input$brewery,
+                      input$coffee,
                       input$desserts)
     final.legend <- legend.info[button.logic,]
     final.locations <- subset(seattle_loc, col %in% final.legend$colors)
